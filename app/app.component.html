@@ -1,0 +1,8 @@
+<my-title [userName]="userNameFromAppComponent"></my-title>
+<my-menu (viewChanged)="changeView($event)"></my-menu>
+<div class="app-content">
+    <my-details *ngIf="selectedView === 'details'"></my-details>
+    <my-dashboard *ngIf="selectedView === 'dashboard'"></my-dashboard>
+    <my-shared-data-example *ngIf="selectedView === 'sharedDataExample'"></my-shared-data-example>
+    <my-view-child-example-parent *ngIf="selectedView === 'viewChildExample'"></my-view-child-example-parent>
+</div>
