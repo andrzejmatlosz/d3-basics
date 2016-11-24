@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Web Applications [UAM]</title>
+
+		<meta name="author" content="Andrzej Matłosz">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<style>
+			.reveal pre code {
+				max-height: 500px;
+			}
+
+			li {
+				text-align: left;
+			}
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+<!--Modules-->
+
+<section>
+	<h1>Introduction to Angular 2</h1>
+	<p><b>Andrzej Matłosz</b><br />andrzej.matlosz@gft.com</p>
+	<p><i>created for CRP team</i></p>
+</section>
+<section>
+	<h2>Table of Contents</h2>
+	<li style="margin-left: 100px;">Modules</li>
+	<li style="margin-left: 100px;">Services</li>
+	<li style="margin-left: 100px;">Components</li>
+	<li style="margin-left: 100px;">Sharing data between Components</li>
+	<li style="margin-left: 100px;">Directives</li>
+	<li style="margin-left: 100px;">Simple Routing</li>
+	<li style="margin-left: 100px;">Simple HTTP</li>
+</section>
+<section class="stack">
+	<section>
+		<h2>Tools</h2>
+		<p>Visual Studio Code extensions- tslint, Codelyzer, angular 2 snippets</p>
+		<p>Style guide, Project structure</p>
+		<p>Angular-seed</p>
+		<p>Augury chrome tool</p>
+	</section>
+</section>
+<section class="stack">
+	<section>
+		<h2>Angular 2 architecture</h2>
+		<img src="img/angular_arcghitecture.jpg" style="width:80%"/>
+	</section>
+</section>
+<section>
+	<section>
+		<h1>Modules</h1>
+	</section>
+
+	<section>
+		<p>Every Angular app has at least one module, the root module</p>
+		<p>Features should be implemented in separate modules</p>
+		<p>Module is defined by @NgModule decorator</p>
+	</section>
+
+	<section>
+		<h3>@NgModule decorator</h3>
+		<p>declarations - contain definition of view classes</p>
+		<p>exports - define which declarations from module could be used in other templates</p>
+		<p>imports - define which modules we used inside this module</p>
+		<p>providers - definition of services from this module which will be accesible in all parts of the app</p>
+		<p>bootstrap - root component. Property used only in root module</p>
+	</section>
+
+	<section>
+		<h3>Bootstraping application</h3>
+		<p>bootstrap code should be placed in main.ts file</p>
+		<p>Angular offers a variety of bootstrapping options, targeting multiple platforms</p>
+	</section>
+
+	<section>
+		<h3>Dynamic bootstraping with the Just-in-time compiler</h3>
+		<pre><code>
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+		</code></pre>
+	</section>
+
+	<!--<section>
+		<h3>Static bootstrapping with the Ahead-Of-time compiler</h3>
+		<pre><code>
+// The browser platform without a compiler
+import { platformBrowser } from '@angular/platform-browser';
+
+// The app module factory produced by the static offline compiler
+import { AppModuleNgFactory } from './app.module.ngfactory';
+
+// Launch with the app module factory.
+platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
+		</code></pre>
+	</section>-->
+
+</section>
+
+<!--SERVICES-->
+
+<section class="stack">
+	<section>
+		<h1>Services</h1>
+	</section>
+
+	<section>
+		<p>Service must be defined with @Injectable decorator</p>
+		<p>Service must be put into providers declaration in module</p>
+		<p>Other elements could inject service in consturctor</p>
+		<pre><code>
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class UserService {
+  userName = 'Steve Kowalski';
+}
+</code></pre>
+	</section>
+
+	<section>
+		<pre><code>
+import { UserService } from './shared/user.service';
+
+@NgModule({
+  ...
+  providers: [ UserService ]
+  ...
+})
+export class AppModule { }
+		</code></pre>
+	</section>
+
+	<section>
+		<pre><code>
+@Component({
+  ...
+})
+export class TitleComponent {
+  userName: string;
+
+  constructor(private _userService: UserService) {
+    this.userName = _userService.userName;
+  }
+}
+		</code></pre>
+	</section>
+</section>
+
+<!--DATA BINDINGS-->
+<section class="stack">
+	<section>
+		<h1>Data Binding</h1>
+	</section>
+
+	<section>
+		<h3>4 binding options</h3>
+		<p>interpolation- {{someVariable}}</p>
+		<p>property binding - one way into the DOM [someProperty]</p>
+		<p>event binding- one way into the component (someEvent)</p>
+		<p>two way binding- should be used only in forms with ngModel (syntax is called "banana in the box") [(ngModel)]</p>
+	</section>
+</section>
+
+<!--COMPONENTS-->
+<section class="stack">
+	<section>
+		<h1>Components</h1>
+	</section>
+
+	<section>
+		<h3>@Component decorator</h3>
+		<p>template / templateUrl</p>
+		<p>selector</p>
+		<p>providers</p>
+		<p>styles / styleUrls</p>
+	</section>
+
+	<section>
+		<h3>Component sample</h3>
+		<pre><code>
+@Component({
+  selector: 'some-component',
+  template: `Text inside component`
+})
+export class SomeComponent {
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Pass parameters into child component</h3>
+		<li>@Input decorator</li>
+		<pre><code>
+@Input() someProperty: PropertyType
+		</code></pre>
+		<li>inputs property in @Component decorator</li>
+		<pre><code>
+@Component({
+	...
+	selector: 'some-component',
+	inputs: ['someProperty']
+	...
+})
+export class SomeComponent
+		</code></pre>
+		<li>Using input parameters in other components template</li>
+		<pre><code>
+<some-component someProperty="value"></some-component>
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Input parameters could be defined with a setter ang getter</h3>
+		<pre><code>
+@Component({
+  selector: 'some-component',
+  template: `
+    <p>"{{myProperty}}"</p>
+  `
+})
+export class SomeComponent {
+  _myProperty: string = '';
+  
+  @Input()
+  set myProperty(myProperty: string) {
+    this._myProperty = myProperty || 'default value';
+  }
+
+  get myProperty() { return this._myProperty; }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Events from child into parent component</h3>
+		<p>@Output decorator or outputs property inside @ComponentDecorator</p>
+		<pre><code>
+@Component({
+  selector: 'some-component',
+  template: '<button (click)="someMethod()">Raise event</button>'
+})
+export class SomeComponent {
+  @Output() onSomeEvent: new EventEmitter&lt;string&gt;();
+  
+  someMethod() {
+  	this.onSomeEvent.emit('event value');
+  }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Interaction from Parent to Child via local variable</h3>
+		<pre><code>
+@Component({
+  selector: 'child-component',
+  template: '&lt;div&gt;internal value of letter: {{internalLetter}}&lt;/div&gt;'
+})
+export class ChildComponent {
+	internalLetter: string;
+}
+
+@Component({
+  selector: 'parent-component',
+  template: `
+    &lt;button (click)="childComponent.internalLetter = 'A'">Set A&lt;/button>
+    &lt;button (click)="childComponent.internalLetter = 'B'">Set B&lt;/button>
+    &lt;div>letter visible from parent: {{childComponent.internalLetter}}&lt;/div>
+    &lt;child-component #childComponent>&lt;/child-component>
+  `
+})
+export class ParentComponent {
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>@ViewChild decorator</h3>
+		<p>@ViewChild decorator is used when we need to use child component inside parent component source code</p>
+		<pre><code>
+// ChildComponent code exactly the same like in previous slide
+
+@Component({
+  selector: 'parent-component',
+  template: `
+    &lt;button (click)="letter = 'A'">Set A&lt;/button>
+    &lt;button (click)="letter = 'B'">Set B&lt;/button>
+    &lt;div>letter visible from parent: {{letter}}&lt;/div>
+    &lt;child-component>&lt;/child-component>
+  `
+})
+export class ParentComponent {
+    @ViewChild(ChildComponent)
+    private childComponent: ChildComponent;
+
+    get letter() {
+        return this.childComponent.internalLetter;
+    }
+
+    set letter(newLetter: string) {
+        this.childComponent.internalLetter = newLetter;
+    }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Sharing data by using service and RxJS</h3>
+		<pre><code>
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+export class SharedDataService {
+    private sharedDataSource = new Subject&lt;string>();
+
+    getSharedData() {
+        return this.sharedDataSource.asObservable();
+    }
+
+    addData(value: string) {
+        this.sharedDataSource.next(value);
+    }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Sharing data by using service and RxJS</h3>
+		<pre><code>
+export class SomeComponent {
+    constructor(private sharedDataService: SharedDataService) { }
+
+	addSomeData() {
+        this.sharedDataService.addData('some text');
+    }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Sharing data by using service and RxJS</h3>
+		<pre><code>
+export class ListComponent {
+	sharedData: string[] = [];
+
+    constructor(private sharedDataService: SharedDataService) {
+        this.sharedDataService.getSharedData().subscribe(
+            newValue => {
+                this.sharedData.push(newValue);
+            }
+        )
+    }
+}
+		</code></pre>
+	</section>
+</section>
+
+<!--DIRECTIVES-->
+<section class="stack">
+	<section>
+		<h1>Directives</h1>
+	</section>
+
+	<section>
+		<h3>Types of directives</h3>
+		<p>Components</p>
+		<p>Structural (NgFor, NgIf)</p>
+		<p>Attribute (NgStyle)</p>
+	</section>
+
+	<section>
+		<h3>Attribute directive - syntax</h3>
+			<pre><code>
+import { Directive, ElementRef, Input, Renderer, HostListener } from '@angular/core';
+
+@Directive({ selector: '[myCustomDirective]' })
+export class CustomDirective {
+    constructor(element: ElementRef, renderer: Renderer) {
+       renderer.setElementStyle(element.nativeElement, 'backgroundColor', 'yellow');
+    }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Attribute directive - listeners</h3>
+			<pre><code>
+@HostListener('mouseenter') onMouseEnter() {
+	/* . . . */
+}
+
+@HostListener('mouseleave') onMouseLeave() {
+	/* . . . */
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Attribute directive - pass parameters</h3>
+			<pre><code>
+@Input() customParameter: string;
+
+@Input() set anotherParameter(someText: string) {
+  //...
+}
+		</code></pre>
+	</section>
+</section>
+
+<!--PIPES-->
+<section class="stack">
+	<section>
+		<h1>Pipes</h1>
+	</section>
+
+	<section>
+		<h3>Custom pipe without parameter</h3>
+			<pre><code>
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({name: 'somePipe'})
+export class somePipe implements PipeTransform {
+  transform(value: string): string {
+    return value + ' something';
+  }
+}
+		</code></pre>
+		<pre><code>
+{{someVariable | somePipe}}
+		</code></pre>
+	</section>
+
+		<section>
+		<h3>Custom pipe with parameter</h3>
+			<pre><code>
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({name: 'somePipe'})
+export class somePipe implements PipeTransform {
+  transform(value: string, param1: any, param2: any): string {
+    return value + ' something';
+  }
+}
+		</code></pre>
+		<pre><code>
+{{someVariable | somePipe:param1:param2}}
+		</code></pre>
+	</section>
+</section>
+
+<!--ROUTING-->
+<section class="stack">
+	<section>
+		<h1>Routing</h1>
+	</section>
+
+	<section>
+		<h3>Define simple routing</h3>
+			<pre><code>
+const appRoutes: Routes = [
+  { path: 'details', component: DetailsComponent },
+  { path: 'dashboard', component: DashboardComponent }
+];
+
+imports: [
+  RouterModule.forRoot(appRoutes)
+],
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Create router links</h3>
+			<pre><code>
+&lt;a routerLink="/details" routerLinkActive="active">Details</a>
+&lt;a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+		</code></pre>
+	</section>
+</section>
+
+<!--HTTP-->
+<section class="stack">
+	<section>
+		<h1>HTTP</h1>
+	</section>
+
+	<section>
+		<h3>Simple http service</h3>
+			<pre><code>
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+@Injectable()
+export class MembersService {
+  constructor(private http: Http) { }
+
+  getMembers() {
+    return this.http.get('app/members/members.json') //get data from sample json file
+      .map(response => response.json());
+  }
+}
+		</code></pre>
+	</section>
+
+	<section>
+		<h3>Consume data from http service</h3>
+			<pre><code>
+export class MembersComponent {
+  members: Array&lt;any>;
+
+  constructor(membersService: MembersService) {
+    membersService.getMembers()
+      .subscribe(
+        members => this.members = members,
+        error => console.error('Error: ' + error),
+        () => console.log('Completed!')
+      );
+  }
+}
+		</code></pre>
+
+		<pre><code>
+&lt;my-member 
+	*ngFor="let member of members"
+	[firstname]="member.firstname"
+	[surname]="member.surname">
+&lt;/my-member&gt;
+		</code></pre>
+	</section>
+</section>
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				width: 1600,
+				height: 1000,
+
+				theme: 'night', // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
