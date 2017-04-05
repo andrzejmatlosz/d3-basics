@@ -34,63 +34,30 @@ export class D3Chart {
 
     createVisualization() {
         this.svg = d3.select<Element, any>('.chart-svg');
-        this.width = +this.svg.attr('width') - this.margin.left - this.margin.right;
-        this.height = +this.svg.attr('height') - this.margin.left - this.margin.right;
-        this.paintLayer = this.svg.append('g')
-            .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
+        // this.width = 
+        // this.height = 
+        // this.paintLayer = 
     }
 
     addAxis() {
         let maxX = d3.max(this.points.map(point => point.x));
         let maxY = d3.max(this.points.map(point => point.y));
-        this.xScale = d3.scaleLinear()
-            .domain([0, maxX + 0.1 * maxX])
-            .range([0, this.width]);
-        this.yScale = d3.scaleLinear()
-            .domain([0, maxY + 0.1 * maxY])
-            .range([this.height, 0]);
-        this.paintLayer.append('g')
-            .attr('transform', `translate(0,${this.height})`)
-            .attr('class', 'x axis')
-            .call(d3.axisBottom(this.xScale));
-        this.paintLayer.append('g')
-            .attr('class', 'y axis')
-            .call(d3.axisLeft(this.yScale));
+        // this.xScale = 
+        // this.yScale = 
+        // draw axis
     }
 
     addLine() {
-        let line: any = d3.line()
-            .x((d: any) => this.xScale(d.x))
-            .y((d: any) => this.yScale(d.y));
-        this.paintLayer.append("path")
-            .data([this.points])
-            .attr('class', 'line')
-            .attr('d', line);
+        // let line: any = 
+        // this.paintLayer.append(
     }
 
     addCrosshair() {
         let paintLayer = this.paintLayer;
         let height = this.height;
 
-        let overlay = this.paintLayer.append("rect")
-            .attr("class", "overlay")
-            .attr("width", this.width)
-            .attr("height", this.height);
+        // let overlay = 
 
-        overlay.on('mousemove', function() {
-                paintLayer.select('.crosshair-line').remove();
-                let x = d3.mouse(this as any)[0];
-                paintLayer.append('line')
-                    .attr('class', 'crosshair-line')
-                    .attr('x1', x)
-                    .attr('x2', x)
-                    .attr('y1', 0)
-                    .attr('y2', height)
-                    .style('stroke', 'gray')
-                    .style('stroke-width', 1);
-            })
-            .on('mouseout', function() {
-                paintLayer.select('.crosshair-line').remove();
-            });
+        // overlay.on(
     }
 }

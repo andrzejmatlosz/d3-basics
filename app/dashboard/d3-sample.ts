@@ -4,89 +4,60 @@ import * as d3 from 'd3';
 @Injectable()
 export class D3Sample {
     svg: d3.Selection<Element, any, HTMLElement, any>;
-    data: Array<number> = [ 160, 40, 210, 180 ];
+    data: Array<number> = [ 160, 40, 210 ];
 
     createVisualization() {
         this.svg = d3.select<Element, any>("svg");
     }
 
     setEqualSize() {
-        this.svg.selectAll('rect')
-            .attr('height', 50)
-            .attr('width', 50)
-            .style("fill", "antiquewhite");
+        // set size of all rects to 50x50 and fill to antiquewhite 
     }
 
     private setParams(rect) {
-        rect.attr("x", 10)
-            .attr("y", (data, index) => index * 30 + 30 )
-            .attr("width", (data, index) => data )
-            .attr("height", 20)
-            .style("fill", "antiquewhite");
+        // set parameters of rect to 
+        // x: 10, 
+        // y: adjusted to index of rect
+        // width: set to value from domain
+        // height: 20
+        // fill: antiquewhite
     }
 
     setWidthAsData() {
-        let selection = this.svg.selectAll('rect')
-            .data(this.data)
-            .call(this.setParams);
-
-        selection.enter().append('rect').call(this.setParams);
+        // set width according to data
     }
 
     updateData() {
         this.data[1] = 300;
         this.data[3] = 280;
-        this.svg.selectAll('rect')
-            .data(this.data)
-            .transition()
-            .duration(1500) 
-            .call(this.setParams);
+        // update first and third rects
     }
 
     removeData() {
         this.data.splice(1, 1);
         this.data.splice(2, 1);
-        this.svg.selectAll('rect')
-            .data(this.data as any, data => data as any)
-            .exit()
-            .transition()
-            .duration(1500)
-            .attr('width', 0)
-            .remove();
+        // remove first and third rects
+        // add animation for removing
     }
 
     setCircles() {
-        let coordinates = (data, index) => index * 30 + 30;
-        this.svg.selectAll("rect")
-            .remove();
-        let circles = this.svg.selectAll("circle")
-            .data(this.data).enter()
-                .append('circle')
-            .attr("cx", coordinates)
-            .attr("cy", coordinates)
-            .attr("r", (data, index) => data / 10 )
-            .style("fill", "antiquewhite")
-            .style("stroke", "black")
-            .style("stroke-width", 2);
+        // remove rects
+        // add circles
     }
 
     private interactions(element) {
         element.on('mouseover', function() {
-            d3.select(this)
-                .style("stroke-width", 4);
+            // set stroke width of selected element to 4 
         })
         .on('mouseout', function() {
-            d3.select(this)
-                .style("stroke-width", 2);
+            // set stroke width of selected element to 2
         })
         .on('click', function() {    
-            d3.select(this)
-                .style("fill", "yellow");
+            // set fill of selected element to yellow
         });
     }
 
     addInteractions() {
-        this.svg.selectAll("rect").call(this.interactions);
-        this.svg.selectAll("circle").call(this.interactions);
+        // add interactions into all rects and all circles
     }
 }
