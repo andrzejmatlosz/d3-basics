@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { SharedDataService } from './../shared/sharedData.service';
 
 @Component({
     selector: 'my-menu',
@@ -11,16 +10,12 @@ export class MenuComponent {
 
     @Output() viewChanged: EventEmitter<string>;
 
-    constructor(private sharedDataService: SharedDataService) {
+    constructor() {
         this.viewChanged = new EventEmitter<string>();
     }
 
     changeView(selectedView) {
         this.viewChanged.emit(selectedView);
         this.selectedView = selectedView;
-    }
-
-    addValueToSharedData() {
-        this.sharedDataService.addData('Value from menu component');
     }
 }

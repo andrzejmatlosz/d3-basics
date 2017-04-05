@@ -1,31 +1,27 @@
+import { D3Chart } from './chart/d3-chart';
+import { D3Sample } from './dashboard/d3-sample';
 
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 
-import { UserService } from './shared/user.service';
-import { SharedDataService } from './shared/sharedData.service';
-
-import { TitleModule } from './title/title.module';
 import { MenuModule } from './menu/menu.module';
-import { DetailsModule } from './details/details.module';
+import { ChartModule } from './chart/chart.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { SharedDataExampleModule } from './sharedDataExample/sharedDataExample.module';
-import { ViewChildExampleModel } from './viewChildExample/viewChildExample.module';
 
 @NgModule({
     imports: [ 
         BrowserModule, 
-        TitleModule,
         MenuModule,
-        DetailsModule,
-        DashboardModule,
-        SharedDataExampleModule,
-        ViewChildExampleModel
+        ChartModule,
+        DashboardModule
     ],
     declarations: [ AppComponent ],
     bootstrap: [ AppComponent ],
-    providers: [ UserService, SharedDataService ]
+    providers: [ 
+        D3Sample,
+        D3Chart 
+    ]
 })
 export class AppModule { }

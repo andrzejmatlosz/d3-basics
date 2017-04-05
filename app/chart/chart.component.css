@@ -1,0 +1,21 @@
+svg {
+    display: block;
+    margin-top: 50px;
+    border: 1px solid black;
+}
+
+:host /deep/ svg .overlay {
+    fill: none;
+    pointer-events: all;
+    cursor: crosshair;
+}
+
+:host /deep/ svg .crosshair-line {
+    cursor: crosshair;
+}
+
+:host /deep/ svg .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
