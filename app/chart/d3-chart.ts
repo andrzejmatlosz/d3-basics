@@ -69,8 +69,6 @@ export class D3Chart {
     }
 
     addCrosshair() {
-        let svg = this.svg.style;
-        let xScale = this.xScale;
         let paintLayer = this.paintLayer;
         let height = this.height;
 
