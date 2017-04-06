@@ -12,6 +12,9 @@ svg {
 
 :host /deep/ svg .crosshair-line {
     cursor: crosshair;
+    pointer-events: none;
+    stroke: grey;
+    stroke-width: 1px;
 }
 
 :host /deep/ svg .line {
